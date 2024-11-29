@@ -7,6 +7,7 @@ export default StyleSheet.create({
   },
   body: {
     margin: 0,
+    flex: 1
   },
   /* Estiliza Scrollbar */
   scrollbar: {

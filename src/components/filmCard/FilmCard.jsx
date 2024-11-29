@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
+    flex: 1
   },
   card: {
     backgroundColor: ColourPalete.primary.color,
@@ -37,27 +38,33 @@ const styles = StyleSheet.create({
     width: 200,
     overflow: 'hidden',
     transition: 'transform 0.3s',
+    flex: 1
   },
   cardHover: {
     transform: [{ scale: 1.05 }],
+    flex: 1
   },
   image: {
     width: '100%',
     height: 300,
     resizeMode: 'cover',
+    flex: 1
   },
   info: {
     padding: 10,
     textAlign: 'left',
+    flex: 1
   },
   infoTitle: {
     fontSize: 18,
     marginVertical: 10,
+    flex: 1
   },
   infoText: {
     fontSize: 14,
     color: ColourPalete.dim.color,
     marginVertical: 5,
+    flex: 1
   },
   // Estilos responsivos podem ser tratados com lógica condicional no componente
 });

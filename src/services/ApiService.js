@@ -3,13 +3,14 @@ class _APIService {
       if (_APIService.SingletonInstance) {
         return _APIService.SingletonInstance;
       }
+      const foo = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNmNjODhjYThiZTRjYTJkMTUxNWViMmNkMTM3YmYxMSIsIm5iZiI6MTczMjc5NjQwMC42ODk1NDIsInN1YiI6IjY2ZmYwODUwZTQ4MDE0OTE0Njg0ZmI4NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.AM4zD4V8bNwekKE33h4B5UOptU8_S1VVxKkoFCOwJeM"
       // Declara variaveis nescessarias para uma requisição bem sucedida
       this.baseUrl = "https://api.themoviedb.org";
       this.posterBaseUrl = "https://image.tmdb.org/t/p/";
       this.requestHeaders = {
         accept: "application/json",
         Authorization:
-          `Bearer ${process.env.VITE_MOVIE_API_PRIVATE_KEY}`,
+          `Bearer ${foo}`,
       };
       this.defaultParams = {};
       _APIService.SingletonInstance = this;
@@ -33,6 +34,7 @@ class _APIService {
         if (!response.ok) {
           console.log("## ERRO na requisição.\n url: " + path);
           console.log(response);
+          console.log(response.status);
         }
         return await response.json();
       } catch (e) {

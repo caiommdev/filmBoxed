@@ -45,7 +45,7 @@ export default function FilmList(props) {
         <TextButton highlight onPress={() => setPage(page - 1)}>
           «
         </TextButton>
-        {page}/{totalPages}
+        <Text>{page}/{totalPages}</Text>
         <TextButton highlight onPress={() => setPage(page + 1)}>
           »
         </TextButton>
@@ -61,11 +61,13 @@ const styles = StyleSheet.create({
     gap: "2vh",
     alignItems: "center",
     justifyContent: "center",
+    flex: 1,
   },
   film: {
     display: "flex",
     flexFlow: "row wrap",
     alignItems: "center",
     justifyContent: "center",
+    flex: 1,
   },
 });
