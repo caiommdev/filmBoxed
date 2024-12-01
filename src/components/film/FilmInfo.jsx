@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
+
+import ColourPalet from "../../AppColours/ColourPalete";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ApiService from "../../services/ApiService";
 
@@ -17,9 +19,9 @@ export default function FilmInfo(props) {
         alt={movie.title}
       />
       <Text style={styles.title}>{movie.title}</Text>
-      <Text>Release Date: {movie.release_date}</Text>
-      <Text>Rating: {movie.vote_average}</Text>
-      <Text>{movie.overview}</Text>
+      <Text style={styles.text}>Release Date: {movie.release_date}</Text>
+      <Text style={styles.text}>Rating: {movie.vote_average}</Text>
+      <Text style={styles.text}>{movie.overview}</Text>
       <Icon name="assessment" size={30} />
     </View>
   );
@@ -36,5 +38,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: ColourPalet.text,
   },
+  text: {
+    color: ColourPalet.text,
+  }
 });

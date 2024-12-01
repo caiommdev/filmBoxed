@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
+
+import ColourPalet from "../AppColours/ColourPalete";
 import FetchData from "../components/fetchData/FetchData";
 import FilmInfo from "../components/film/FilmInfo";
 
@@ -11,10 +13,10 @@ export default function FilmDetails(props) {
   const [movie, setMovie] = useState();
 
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.header}>
-        <Text onPress={() => navigation.goBack()}>Voltar</Text>
-        <Text>Movie</Text>
+        <Text style={styles.headerText} onPress={() => navigation.goBack()}>Voltar</Text>
+        <Text style={styles.headerText}>Movie</Text>
       </View>
       <FetchData
         setData={(dt) => {
@@ -29,6 +31,12 @@ export default function FilmDetails(props) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: ColourPalet.primary,
+    color: ColourPalet.text,
+  },
   header: {
     display: "flex",
     flexDirection: "row",
@@ -36,4 +44,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "start",
   },
+  headerText: {
+    color: ColourPalet.text,
+  }
 });
