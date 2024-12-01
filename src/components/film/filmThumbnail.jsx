@@ -5,13 +5,13 @@ import ApiService from "../../services/ApiService";
 
 export default function FilmThumbnail(props) {
   const [hover, setHover] = React.useState(false);
-  const navigate = useNavigation();
+  const navigation = useNavigation();
 
   const movie = props.data;
 
   return (
     <TouchableOpacity
-      onPress={() => navigate("/movie/" + movie.id)}
+      onPress={() => navigation.navigate('FilmDetails', { id: movie.id })}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >

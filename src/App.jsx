@@ -33,25 +33,24 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <ScrollView>
-        <View style={styles.body}>
-          <View style={X.container}>
-            <Header
-              isLoggedIn={isLoggedIn}
-              username={username}
-              onLoginClick={() => setShowLogin(true)}
-              onLogoutClick={handleLogout}
-            />
-            <FilmList />
-            {/* <Stack.Navigator>
+      <View style={styles.body}>
+        <View style={X.container}>
+          <Header
+            isLoggedIn={isLoggedIn}
+            username={username}
+            onLoginClick={() => setShowLogin(true)}
+            onLogoutClick={handleLogout}
+          />
+          <View style={{ flex: 1, width: '100%' }}>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
               <Stack.Screen name="FilmList" component={FilmList} />
-              <Stack.Screen name="FilmList2" component={FilmList2} />
-              <Stack.Screen name="Login" component={Login} />
               <Stack.Screen name="FilmDetails" component={FilmDetails} />
-            </Stack.Navigator> */}
+              {/*<Stack.Screen name="FilmList2" component={FilmList2} />
+              <Stack.Screen name="Login" component={Login} /> */}
+            </Stack.Navigator>
           </View>
         </View>
-      </ScrollView>
+      </View>
     </NavigationContainer>
   );
 }
@@ -62,9 +61,9 @@ const X = StyleSheet.create({
     backgroundColor: ColourPalet.primary,
     color: ColourPalet.text,
     minHeight: '100vh',
+    width: '100%',
     justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%'
+    alignItems: 'center'
   },
 });
 

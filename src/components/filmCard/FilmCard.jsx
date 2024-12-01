@@ -65,6 +65,5 @@ const styles = StyleSheet.create({
     color: ColourPalete.dim.color,
     marginVertical: 5,
     flex: 1
-  },
-  // Estilos responsivos podem ser tratados com lógica condicional no componente
+  }
 });
