@@ -7,7 +7,6 @@ import ColourPalet from './AppColours/ColourPalete';
 import Login from './screens/login/Login';
 import Header from './components/header/Header';
 import FilmList from './screens/FilmList';
-import FilmList2 from './screens/FilmList2';
 import FilmDetails from './screens/FilmDetails';
 import Home from './screens/Home';
 
