@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { assessments } from '../data/assessmentData';
 
@@ -15,7 +15,7 @@ export default function FilmDetails(props) {
   const [movie, setMovie] = useState();
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText} onPress={() => navigation.goBack()}>Voltar</Text>
         <Text style={styles.headerText}>Movie</Text>
@@ -31,7 +31,7 @@ export default function FilmDetails(props) {
     
       <Assessment assessments={assessments}/>
     
-    </View>
+    </ScrollView>
   );
 }
 
