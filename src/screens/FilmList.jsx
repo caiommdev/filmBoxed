@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, View, Text, StyleSheet } from "react-native";
+import { ScrollView, View, Text, StyleSheet, Dimensions } from "react-native";
 
 import ColourPalet from "../AppColours/ColourPalete";
 import FetchData from "../components/fetchData/FetchData";
 import FilmThumbnail from "../components/film/filmThumbnail";
 import ControlBar from "../components/controlBar/ControlBar";
 import TextButton from "../components/inputs/textButton/TextButton";
+
+const { width } = Dimensions.get("window")
 
 export default function FilmList(props) {
   const [movies, setMovies] = useState([]);
@@ -37,6 +39,7 @@ export default function FilmList(props) {
           }}
           route={"3/discover/movie"}
         >
+
           <View style={styles.film}>
             {movies?.map((movie, i) => (
               <FilmThumbnail data={movie} key={"film-info" + i} />
@@ -75,9 +78,10 @@ const styles = StyleSheet.create({
   },
   film: {
     display: "flex",
-    flexFlow: "row wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: "center",
     justifyContent: "center",
-    flex: 1,
+    width: width
   },
 });

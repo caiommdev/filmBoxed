@@ -8,6 +8,7 @@ import Login from './screens/login/Login';
 import Header from './components/header/Header';
 import FilmList from './screens/FilmList';
 import FilmDetails from './screens/FilmDetails';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Home from './screens/Home';
 
 const Stack = createStackNavigator();
@@ -32,6 +33,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
+      <GestureHandlerRootView style={{flex:1}}>
       <View style={styles.body}>
         <View style={X.container}>
           <Header
@@ -39,7 +41,7 @@ export default function App() {
             username={username}
             onLoginClick={() => setShowLogin(true)}
             onLogoutClick={handleLogout}
-          />
+            />
           <View style={{ flex: 1, width: '100%' }}>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
               <Stack.Screen name="FilmList" component={FilmList} />
@@ -50,6 +52,7 @@ export default function App() {
           </View>
         </View>
       </View>
+      </GestureHandlerRootView>
     </NavigationContainer>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, ScrollView, Text, StyleSheet } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { assessments } from '../data/assessmentData';
 
@@ -15,15 +15,12 @@ export default function FilmDetails(props) {
   const [movie, setMovie] = useState();
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <ScrollView style={styles.container}>
+      {/* <View style={styles.header}>
         <Text style={styles.headerText} onPress={() => navigation.goBack()}>Voltar</Text>
-        <Text style={styles.headerText}>Movie</Text>
-      </View>
+      </View> */}
       <FetchData
-        setData={(dt) => {
-          setMovie(dt);
-        }}
+        setData={(dt) => { setMovie(dt); }}
         route={"3/movie/" + id}
       >
         <FilmInfo data={movie} />
@@ -31,7 +28,7 @@ export default function FilmDetails(props) {
     
       <Assessment assessments={assessments}/>
     
-    </View>
+    </ScrollView>
   );
 }
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, FlatList } from 'react-native';
+import ColourPalet from "../../AppColours/ColourPalete";
 
 const AssessmentItem = ({ user, photo, rating, comment }) => {
     return (
@@ -20,20 +21,20 @@ export default function Assessment({ assessments }) {
     }
 
     return (
-        <FlatList
-            data={assessments}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-                <AssessmentItem
-                    user={item.user}
-                    photo={item.photo}
-                    rating={item.rating}
-                    comment={item.comment}
-                />
-            )}
-            contentContainerStyle={styles.assessmentContainer}
-        />
-    );
+        <View style={styles.assessmentContainer}>
+            {
+                assessments.map((item, key)=> (
+                    <AssessmentItem
+                        key={key}
+                        user={item.user}
+                        photo={item.photo}
+                        rating={item.rating}
+                        comment={item.comment}
+                    />
+            ))
+            }
+        </View>
+        );
 }
 
 const styles = StyleSheet.create({
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 15,
         padding: 10,
-        backgroundColor: '#f9f9f9',
+        backgroundColor: ColourPalet.secondary,
         borderRadius: 8,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
@@ -64,19 +65,20 @@ const styles = StyleSheet.create({
     user: {
         fontSize: 16,
         fontWeight: 'bold',
+        color: ColourPalet.textSecondary,
     },
     rating: {
         fontSize: 14,
-        color: '#555',
+        color: ColourPalet.highlight,
     },
     comment: {
         fontSize: 14,
-        color: '#333',
+        color: ColourPalet.textSecondary,
     },
     noAssessments: {
         textAlign: 'center',
         marginTop: 20,
         fontSize: 16,
-        color: '#888',
+        color: ColourPalet.dim,
     },
 });
