@@ -17,7 +17,7 @@ class _APIService {
     }
   
     getDefaultQueryParams() {
-      return this.defaultParams; //Object.assign({}, this.defaultParams);
+      return this.defaultParams;
     }
   
     getPosterUrl(film, width = "500") {

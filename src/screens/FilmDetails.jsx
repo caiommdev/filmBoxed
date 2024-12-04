@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, ScrollView, Text, StyleSheet } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { assessments } from '../data/assessmentData';
 
@@ -16,14 +16,11 @@ export default function FilmDetails(props) {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text style={styles.headerText} onPress={() => navigation.goBack()}>Voltar</Text>
-        <Text style={styles.headerText}>Movie</Text>
-      </View>
+      </View> */}
       <FetchData
-        setData={(dt) => {
-          setMovie(dt);
-        }}
+        setData={(dt) => { setMovie(dt); }}
         route={"3/movie/" + id}
       >
         <FilmInfo data={movie} />
