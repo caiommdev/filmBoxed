@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { ScrollView, View, Text, StyleSheet, Dimensions } from "react-native";
+import React, { useState } from "react";
+import { ScrollView, View, Text, StyleSheet, ActivityIndicator } from "react-native";
 
 import ColourPalet from "../AppColours/ColourPalete";
 import FetchData from "../components/fetchData/FetchData";
@@ -11,25 +11,41 @@ const { width } = Dimensions.get("window")
 
 export default function FilmList(props) {
   const [movies, setMovies] = useState([]);
-  const [page, _setPage] = useState(1);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
 
-  const setPage = (p) => {
-    if (p > 0 && p < totalPages) {
-      _setPage(p);
+  const loadMoreMovies = () => {
+    if (!loading && page < totalPages) {
+      setLoading(true);
+      setPage(page + 1);
+    }
+  };
+
+  const handleScroll = ({ nativeEvent }) => {
+    const { layoutMeasurement, contentOffset, contentSize } = nativeEvent;
+    const isCloseToBottom = layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
+
+    if (isCloseToBottom) {
+      loadMoreMovies();
     }
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView 
+      style={styles.container}
+      onScroll={handleScroll}
+      scrollEventThrottle={400}
+    >
       <View style={styles.page}>
-        <Text>All Movies</Text>
+        <Text style={styles.title}>All Movies</Text>
         <FetchData
-          setData={(dt) => {
-            setMovies(dt.results);
-            setPage(dt.page);
-            setTotalPages(dt.total_pages);
+          setData={(response) => {
+            setMovies(prev => [...prev, ...response.results]);
+            setTotalPages(response.total_pages);
+            setLoading(false);
           }}
+          loading={loading}  // Passamos o estado de loading como prop
           queryParams={{
             include_adult: false,
             sort_by: "popularity.desc",
@@ -38,6 +54,7 @@ export default function FilmList(props) {
             page: page,
           }}
           route={"3/discover/movie"}
+          page={page}
         >
 
           <View style={styles.film}>
@@ -45,17 +62,13 @@ export default function FilmList(props) {
               <FilmThumbnail data={movie} key={"film-info" + i} />
             ))}
           </View>
+          {loading && (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color={ColourPalet.text} />
+              <Text style={styles.loadingText}>Carregando mais filmes...</Text>
+            </View>
+          )}
         </FetchData>
-
-        <ControlBar>
-          <TextButton highlight onPress={() => setPage(page - 1)}>
-            «
-          </TextButton>
-          <Text>{page}/{totalPages}</Text>
-          <TextButton highlight onPress={() => setPage(page + 1)}>
-            »
-          </TextButton>
-        </ControlBar>
       </View>
     </ScrollView>
   );
@@ -84,4 +97,21 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: width
   },
+  loadingContainer: {
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    flex: 1,
+    minHeight: 100,
+  },
+  loadingText: {
+    color: ColourPalet.text,
+    marginTop: 10,
+  },
+  title: {
+    color: ColourPalet.text,
+    fontSize: 20,
+    marginVertical: 10,
+  }
 });

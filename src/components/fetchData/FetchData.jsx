@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+
+import ColourPalet from "../../AppColours/ColourPalete";
 import ApiService from "../../services/ApiService";
 
-// Recebe como props:
-// path (caminho)
-// setData (função que será chamada quando recebermos a resposta)
-// queryParams (Parametros da rota)
-// style (estiliza o componente enquanto ainda está carregando)
 export default function FetchData(props) {
-  const [loading, setLoading] = useState(true); // Estado para controle de carregamento
+  const [initialLoading, setInitialLoading] = useState(true);
 
   const query = {
     ...props.queryParams,
@@ -16,16 +13,38 @@ export default function FetchData(props) {
   };
 
   useEffect(() => {
-    ApiService.get(props.route, query).then((r) => {
-      props.setData(r);
-      setLoading(false);
+    if (props.page === 1) {
+      setInitialLoading(true);
+    }
+    
+    ApiService.get(props.route, query).then((response) => {
+      props.setData(response);
+      setInitialLoading(false);
     });
-  }, []);
+  }, [props.page]);
 
-  if (loading) {
-    return <View style={props.style}><Text>Loading...</Text></View>; // Exibe uma mensagem de carregamento
+  if (initialLoading && props.page === 1) {
+    return (
+      <View style={styles.initialLoading}>
+        <ActivityIndicator size="large" color={ColourPalet.text} />
+        <Text style={styles.loadingText}>Carregando filmes...</Text>
+      </View>
+    );
   }
 
   return props.children;
 }
+
+const styles = StyleSheet.create({
+  initialLoading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: 300,
+  },
+  loadingText: {
+    color: ColourPalet.text,
+    marginTop: 10,
+  }
+});
 
