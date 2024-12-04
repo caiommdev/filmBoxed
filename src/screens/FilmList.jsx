@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ScrollView, View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import { ScrollView, View, Text, StyleSheet, ActivityIndicator, Dimensions } from "react-native";
 
 import ColourPalet from "../AppColours/ColourPalete";
 import FetchData from "../components/fetchData/FetchData";
