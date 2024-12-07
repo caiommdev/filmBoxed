@@ -1,10 +1,31 @@
-import { View, Text, StyleSheet } from "react-native";
+import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { MaterialIcons } from '@expo/vector-icons';
+import ColourPalet from "../AppColours/ColourPalete";
 
-export default function Home() {
+export default function Home({ navigation }) {
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>Home</Text>
-            <Text style={styles.text}>Coming soon...</Text>
+            <View style={styles.logoContainer}>
+                <MaterialIcons name="movie" size={120} color={ColourPalet.highlight} />
+                <Text style={styles.title}>Film Boxed</Text>
+            </View>
+
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity 
+                    style={styles.button}
+                    onPress={() => console.log('Sign Up pressed')}
+                >
+                    <Text style={styles.buttonText}>Sign Up</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity 
+                    style={[styles.button, styles.buttonOutline]}
+                    onPress={() => console.log('Sign In pressed')}
+                >
+                    <Text style={styles.buttonText}>Sign In</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
@@ -14,11 +35,38 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        width: '100%',
-        height: '100vh'
+        backgroundColor: ColourPalet.primary,
+        padding: 20
     },
-    text: {
-        fontSize: 20,
-        marginVertical: 10
+    logoContainer: {
+        alignItems: 'center',
+        marginBottom: 60
+    },
+    title: {
+        fontSize: 48,
+        fontWeight: 'bold',
+        color: ColourPalet.highlight,
+        marginTop: 20
+    },
+    buttonContainer: {
+        width: '100%',
+        gap: 20
+    },
+    button: {
+        backgroundColor: ColourPalet.highlight,
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+        width: '100%'
+    },
+    buttonOutline: {
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        borderColor: ColourPalet.highlight
+    },
+    buttonText: {
+        color: ColourPalet.text,
+        fontSize: 18,
+        fontWeight: 'bold'
     }
 });

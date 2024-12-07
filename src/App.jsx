@@ -41,13 +41,15 @@ export default function App() {
             username={username}
             onLoginClick={() => setShowLogin(true)}
             onLogoutClick={handleLogout}
-            />
+          />
           <View style={{ flex: 1, width: '100%' }}>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Navigator 
+              screenOptions={{ headerShown: false }}
+              initialRouteName="Home"
+            >
+              <Stack.Screen name="Home" component={Home} />
               <Stack.Screen name="FilmList" component={FilmList} />
               <Stack.Screen name="FilmDetails" component={FilmDetails} />
-              {/*<Stack.Screen name="FilmList2" component={FilmList2} />
-              <Stack.Screen name="Login" component={Login} /> */}
             </Stack.Navigator>
           </View>
         </View>
