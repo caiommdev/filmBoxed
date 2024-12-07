@@ -96,6 +96,32 @@ class _APIService {
         throw error;
       }
     }
+
+    async getGenres() {
+      try {
+        const response = await this.get('3/genre/movie/list', {
+          language: 'en-US'
+        });
+        return response.genres;
+      } catch (error) {
+        console.error('Erro ao buscar gêneros:', error);
+        throw error;
+      }
+    }
+
+    async getFilteredMovies(filters, page = 1) {
+      try {
+        const response = await this.get('3/discover/movie', {
+          ...filters,
+          page: page,
+          language: 'en-US'
+        });
+        return response;
+      } catch (error) {
+        console.error('Erro na busca filtrada:', error);
+        throw error;
+      }
+    }
   }
   
   const ApiService = new _APIService();
