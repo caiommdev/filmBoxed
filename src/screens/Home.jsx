@@ -14,14 +14,14 @@ export default function Home({ navigation }) {
             <View style={styles.buttonContainer}>
                 <TouchableOpacity 
                     style={styles.button}
-                    onPress={() => console.log('Sign Up pressed')}
+                    onPress={() => navigation.navigate('SignUp')}
                 >
                     <Text style={styles.buttonText}>Sign Up</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity 
                     style={[styles.button, styles.buttonOutline]}
-                    onPress={() => console.log('Sign In pressed')}
+                    onPress={() => navigation.navigate('Login')}
                 >
                     <Text style={styles.buttonText}>Sign In</Text>
                 </TouchableOpacity>

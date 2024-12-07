@@ -10,6 +10,7 @@ import FilmList from './screens/FilmList';
 import FilmDetails from './screens/FilmDetails';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Home from './screens/Home';
+import SignUp from './screens/SignUp';
 
 const Stack = createStackNavigator();
 
@@ -43,11 +44,13 @@ export default function App() {
             onLogoutClick={handleLogout}
           />
           <View style={{ flex: 1, width: '100%' }}>
-            <Stack.Navigator 
+          <Stack.Navigator 
               screenOptions={{ headerShown: false }}
               initialRouteName="Home"
             >
               <Stack.Screen name="Home" component={Home} />
+              <Stack.Screen name="SignUp" component={SignUp} />
+              <Stack.Screen name="Login" component={Login} />
               <Stack.Screen name="FilmList" component={FilmList} />
               <Stack.Screen name="FilmDetails" component={FilmDetails} />
             </Stack.Navigator>
