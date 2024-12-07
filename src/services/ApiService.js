@@ -68,6 +68,60 @@ class _APIService {
       }
       return q;
     }
+
+    // Função utilitária para debounce
+    debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
+    async searchMovies(query, page = 1) {
+      try {
+        const response = await this.get('3/search/movie', {
+          query: encodeURIComponent(query),
+          page: page,
+          language: 'en-US',
+          include_adult: false
+        });
+        return response;
+      } catch (error) {
+        console.error('Erro na busca:', error);
+        throw error;
+      }
+    }
+
+    async getGenres() {
+      try {
+        const response = await this.get('3/genre/movie/list', {
+          language: 'en-US'
+        });
+        return response.genres;
+      } catch (error) {
+        console.error('Erro ao buscar gêneros:', error);
+        throw error;
+      }
+    }
+
+    async getFilteredMovies(filters, page = 1) {
+      try {
+        const response = await this.get('3/discover/movie', {
+          ...filters,
+          page: page,
+          language: 'en-US'
+        });
+        return response;
+      } catch (error) {
+        console.error('Erro na busca filtrada:', error);
+        throw error;
+      }
+    }
   }
   
   const ApiService = new _APIService();
