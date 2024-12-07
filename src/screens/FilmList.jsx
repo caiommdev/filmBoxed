@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ScrollView, View, Text, StyleSheet, ActivityIndicator, Dimensions } from "react-native";
 
 import ColourPalet from "../AppColours/ColourPalete";
@@ -9,11 +9,19 @@ import TextButton from "../components/inputs/textButton/TextButton";
 
 const { width } = Dimensions.get("window")
 
-export default function FilmList(props) {
+export default function FilmList({ route }) {
   const [movies, setMovies] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
+  const searchQuery = route.params?.searchQuery;
+  const searchResults = route.params?.searchResults;
+
+  useEffect(() => {
+    if (searchResults) {
+      setMovies(searchResults);
+    }
+  }, [searchResults]);
 
   const loadMoreMovies = () => {
     if (!loading && page < totalPages) {
@@ -38,14 +46,16 @@ export default function FilmList(props) {
       scrollEventThrottle={400}
     >
       <View style={styles.page}>
-        <Text style={styles.title}>All Movies</Text>
+        <Text style={styles.title}>
+          {searchQuery ? 'Resultados da Pesquisa' : 'All Movies'}
+        </Text>
         <FetchData
           setData={(response) => {
             setMovies(prev => [...prev, ...response.results]);
             setTotalPages(response.total_pages);
             setLoading(false);
           }}
-          loading={loading}  // Passamos o estado de loading como prop
+          loading={loading}
           queryParams={{
             include_adult: false,
             sort_by: "popularity.desc",

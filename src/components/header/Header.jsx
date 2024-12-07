@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
+import SearchBar from '../searchBar/SearchBar';
 
 function Header({ isLoggedIn, username, onLoginClick, onLogoutClick }) {
+  const [showSearch, setShowSearch] = useState(false);
   const navigation = useNavigation();
 
   return (
@@ -18,16 +20,25 @@ function Header({ isLoggedIn, username, onLoginClick, onLogoutClick }) {
 
         <Text style={styles.logo}>Film Boxed</Text>
 
-        {isLoggedIn ? (
-          <TouchableOpacity style={styles.iconButton} onPress={onLogoutClick}>
-            <MaterialIcons name="account-circle" size={28} color="#fff" />
+        <View style={styles.rightIcons}>
+          <TouchableOpacity 
+            style={styles.iconButton}
+            onPress={() => setShowSearch(!showSearch)}
+          >
+            <MaterialIcons name="search" size={28} color="#fff" />
           </TouchableOpacity>
-        ) : (
-          <TouchableOpacity style={styles.iconButton} onPress={onLoginClick}>
-            <MaterialIcons name="login" size={28} color="#fff" />
-          </TouchableOpacity>
-        )}
+          {isLoggedIn ? (
+            <TouchableOpacity style={styles.iconButton} onPress={onLogoutClick}>
+              <MaterialIcons name="account-circle" size={28} color="#fff" />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity style={styles.iconButton} onPress={onLoginClick}>
+              <MaterialIcons name="login" size={28} color="#fff" />
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
+      {showSearch && <SearchBar />}
     </SafeAreaView>
   );
 }
@@ -60,7 +71,11 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     padding: 10,
-  }
+  },
+  rightIcons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
 });
 
 export default Header;
