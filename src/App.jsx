@@ -48,7 +48,7 @@ export default function App() {
             >
               <Stack.Screen name="Home" component={Home} />
               <Stack.Screen name="SignUp" component={SignUp} initialParams={{ handleLogin }}/>
-              <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen name="Login" component={Login} initialParams={{ handleLogin }}/>
               <Stack.Screen name="FilmList" component={FilmList} />
               <Stack.Screen name="FilmDetails" component={FilmDetails} />
             </Stack.Navigator>
