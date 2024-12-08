@@ -4,9 +4,18 @@ import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import SearchBar from '../searchBar/SearchBar';
 
-function Header({ isLoggedIn, username, onLoginClick, onLogoutClick }) {
+function Header({ isLoggedIn, username, onLogoutClick }) {
   const [showSearch, setShowSearch] = useState(false);
   const navigation = useNavigation();
+
+  const handleLogoutClick = () => {
+    onLogoutClick();
+    navigation.navigate('Home');
+  };
+
+  const handleSearchClick = () => {
+	setShowSearch(!showSearch)
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -23,19 +32,23 @@ function Header({ isLoggedIn, username, onLoginClick, onLogoutClick }) {
         <View style={styles.rightIcons}>
           <TouchableOpacity 
             style={styles.iconButton}
-            onPress={() => setShowSearch(!showSearch)}
+            onPress={() => handleSearchClick()}
           >
             <MaterialIcons name="search" size={28} color="#fff" />
-          </TouchableOpacity>
+          
+		  </TouchableOpacity>
+
           {isLoggedIn ? (
-            <TouchableOpacity style={styles.iconButton} onPress={onLogoutClick}>
-              <MaterialIcons name="account-circle" size={28} color="#fff" />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity style={styles.iconButton} onPress={onLoginClick}>
-              <MaterialIcons name="login" size={28} color="#fff" />
-            </TouchableOpacity>
-          )}
+            <View style={styles.userSection}>
+              <Text style={styles.username}>{username}</Text>
+              <TouchableOpacity 
+                style={styles.iconButton} 
+                onPress={() => handleLogoutClick()}
+              >
+                <MaterialIcons name="logout" size={28} color="#fff" />
+              </TouchableOpacity>
+            </View>
+          ) : null}
         </View>
       </View>
       {showSearch && <SearchBar />}
@@ -76,6 +89,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  userSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10
+  },
+  username: {
+    color: '#fff',
+    fontSize: 16
+  }
 });
 
 export default Header;

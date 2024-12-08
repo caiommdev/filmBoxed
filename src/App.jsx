@@ -19,9 +19,8 @@ export default function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [username, setUsername] = useState('');
 
-  const handleLogin = (email) => {
-    const user = email.split('@')[0];
-    setUsername(user);
+  const handleLogin = (username) => {
+    setUsername(username);
     setIsLoggedIn(true);
     setShowLogin(false);
   };
@@ -40,7 +39,6 @@ export default function App() {
           <Header
             isLoggedIn={isLoggedIn}
             username={username}
-            onLoginClick={() => setShowLogin(true)}
             onLogoutClick={handleLogout}
           />
           <View style={{ flex: 1, width: '100%' }}>
@@ -49,7 +47,7 @@ export default function App() {
               initialRouteName="Home"
             >
               <Stack.Screen name="Home" component={Home} />
-              <Stack.Screen name="SignUp" component={SignUp} />
+              <Stack.Screen name="SignUp" component={SignUp} initialParams={{ handleLogin }}/>
               <Stack.Screen name="Login" component={Login} />
               <Stack.Screen name="FilmList" component={FilmList} />
               <Stack.Screen name="FilmDetails" component={FilmDetails} />

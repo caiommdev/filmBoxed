@@ -6,53 +6,49 @@ import {
   TouchableOpacity, 
   StyleSheet,
   Alert,
-  Keyboard,
-  TouchableWithoutFeedback,
   KeyboardAvoidingView,
-  Platform
+  TouchableWithoutFeedback,
+  Platform,
+  Keyboard 
 } from 'react-native';
-
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import ColourPalet from '../AppColours/ColourPalete';
 import UserService from '../services/UserService';
 
-export default function SignUp({ navigation }) {
+export default function SignUp() {
+  const navigation = useNavigation();
+  const { handleLogin } = useRoute().params;
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
-    birthDate: new Date(),
     username: '@'
   });
-  const [showDatePicker, setShowDatePicker] = useState(false);
-
-  const validateEmail = (email) => {
-    const regex = /^[^\s@]+@[^\s@]+\.com(\.[a-zA-Z]{2})?$/;
-    return regex.test(email);
-  };
 
   const handleSubmit = async () => {
-    if (!UserService.validateFullName(formData.fullName)) {
-      Alert.alert('Erro', 'Digite seu nome e sobrenome');
-      return;
-    }
-    if (!validateEmail(formData.email)) {
-      Alert.alert('Erro', 'Email deve seguir o formato: exemplo@dominio.com ou exemplo@dominio.com.br');
-      return;
-    }
-    if (!UserService.validateAge(formData.birthDate)) {
-      Alert.alert('Erro', 'Você precisa ter mais de 18 anos');
-      return;
-    }
-    if (!UserService.validateUsername(formData.username)) {
-      Alert.alert('Erro', 'Username inválido');
-      return;
-    }
-
     try {
+      if (!UserService.validateFullName(formData.fullName)) {
+        Alert.alert('Erro', 'Digite seu nome e sobrenome');
+        return;
+      }
+      if (!UserService.validateEmail(formData.email)) {
+        Alert.alert('Erro', 'Email deve seguir o formato: exemplo@dominio.com ou exemplo@dominio.com.br');
+        return;
+      }
+      if (!UserService.validateUsername(formData.username)) {
+        Alert.alert('Erro', 'Username deve começar com @ e ter mais de 1 caractere');
+        return;
+      }
+
       await UserService.saveUser(formData);
-      navigation.navigate('FilmList');
+      handleLogin(formData.username);
+      Alert.alert('Sucesso', 'Conta criada com sucesso!', [
+        { 
+          text: 'OK', 
+          onPress: () => navigation.navigate('FilmList')
+        }
+      ]);
     } catch (error) {
-      Alert.alert('Erro', 'Erro ao salvar usuário');
+      Alert.alert('Erro', error.message || 'Erro ao criar conta');
     }
   };
 
@@ -60,69 +56,45 @@ export default function SignUp({ navigation }) {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView 
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}
-      >
+        style={styles.container}>
+
         <View style={styles.formContainer}>
-          <Text style={styles.title}>Criar Conta</Text>
-          
-          <TextInput
-            style={styles.input}
-            placeholder="Nome e Sobrenome"
-            placeholderTextColor={ColourPalet.dim}
-            value={formData.fullName}
-            onChangeText={(text) => setFormData({...formData, fullName: text})}
-          />
+            <Text style={styles.title}>Criar Conta</Text>
+            
+            <TextInput
+                style={styles.input}
+                placeholder="Nome e Sobrenome"
+                placeholderTextColor={ColourPalet.dim}
+                value={formData.fullName}
+                onChangeText={(text) => setFormData({...formData, fullName: text})}
+            />
 
-          <TextInput
-            style={styles.input}
-            placeholder="email@exemplo.com"
-            placeholderTextColor={ColourPalet.dim}
-            value={formData.email}
-            onChangeText={(text) => setFormData({...formData, email: text})}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
+            <TextInput
+                style={styles.input}
+                placeholder="email@exemplo.com"
+                placeholderTextColor={ColourPalet.dim}
+                value={formData.email}
+                onChangeText={(text) => setFormData({...formData, email: text})}
+                keyboardType="email-address"
+                autoCapitalize="none"
+            />
+            
+            <TextInput
+                style={styles.input}
+                placeholder="@seu.username"
+                placeholderTextColor={ColourPalet.dim}
+                value={formData.username}
+                onChangeText={(text) => setFormData({...formData, username: text})}
+                autoCapitalize="none"
+            />
 
-          <TextInput
-            style={styles.input}
-            placeholder="Data de Nascimento (DD/MM/AAAA)"
-            placeholderTextColor={ColourPalet.dim}
-            value={formData.birthDate instanceof Date 
-              ? formData.birthDate.toLocaleDateString('pt-BR')
-              : ''
-            }
-            onFocus={() => setShowDatePicker(true)}
-            keyboardType="numeric"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="@seu.username"
-            placeholderTextColor={ColourPalet.dim}
-            value={formData.username}
-            onChangeText={(text) => setFormData({...formData, username: text})}
-            autoCapitalize="none"
-          />
-
-          <TouchableOpacity 
-            style={styles.button}
-            onPress={handleSubmit}
-          >
-            <Text style={styles.buttonText}>Criar Conta</Text>
-          </TouchableOpacity>
-        </View>
-
-        {showDatePicker && (
-          <DateTimePicker
-            value={formData.birthDate}
-            mode="date"
-            display="spinner"
-            onChange={(event, date) => {
-              setShowDatePicker(false);
-              if (date) setFormData({...formData, birthDate: date});
-            }}
-          />
-        )}
+            <TouchableOpacity 
+                style={styles.button}
+                onPress={handleSubmit}
+            >
+                <Text style={styles.buttonText}>Criar Conta</Text>
+            </TouchableOpacity>
+            </View>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
@@ -154,7 +126,8 @@ const styles = StyleSheet.create({
     color: ColourPalet.text
   },
   dateText: {
-    color: ColourPalet.text
+    color: ColourPalet.text,
+    fontSize: 16,
   },
   button: {
     backgroundColor: ColourPalet.highlight,
@@ -167,5 +140,17 @@ const styles = StyleSheet.create({
     color: ColourPalet.text,
     fontSize: 18,
     fontWeight: 'bold'
+  },
+  dateButton: {
+    justifyContent: 'center',
+  },
+  placeholderText: {
+    color: ColourPalet.dim,
+  },
+  inputText: {
+    color: ColourPalet.text,
+  },
+  placeholder: {
+    color: ColourPalet.dim,
   }
 });
