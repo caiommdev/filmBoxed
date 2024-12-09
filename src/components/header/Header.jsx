@@ -27,8 +27,6 @@ function Header({ isLoggedIn, username, onLogoutClick }) {
           <MaterialIcons name="movie" size={28} color="#fff" />
         </TouchableOpacity>
 
-        <Text style={styles.logo}>Film Boxed</Text>
-
         <View style={styles.rightIcons}>
           <TouchableOpacity 
             style={styles.iconButton}

@@ -38,6 +38,10 @@ class UserService {
         throw new Error('Email já cadastrado');
       }
 
+      if (!this.validatePassword(userData.password)) {
+        throw new Error('Senha deve ter pelo menos 6 caracteres');
+      }
+
       users.push(userData);
       await FileSystem.writeAsStringAsync(
         this.filePath,
@@ -67,6 +71,10 @@ class UserService {
 
   validateFullName(name) {
     return name.trim().split(' ').length >= 2;
+  }
+
+  validatePassword(password) {
+    return password.length >= 6;
   }
 }
 

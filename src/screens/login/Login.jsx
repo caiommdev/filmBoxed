@@ -14,18 +14,21 @@ import {
 import { useNavigation, useRoute } from "@react-navigation/native";
 import ColourPalet from "../../AppColours/ColourPalete";
 import UserService from "../../services/UserService";
+import { Ionicons } from '@expo/vector-icons';
 
 function Login() {
   const navigation = useNavigation();
   const { handleLogin } = useRoute().params;
   const [email, setEmail] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async () => {
     try {
       const user = await UserService.getUser(email);
       
-      if (!user) {
-        Alert.alert("Erro", "Usuário não encontrado");
+      if (!user || user.password !== password) {
+        Alert.alert("Erro", "Usuário ou senha incorretos");
         return;
       }
 
@@ -55,6 +58,21 @@ function Login() {
             keyboardType="email-address"
             autoCapitalize="none"
           />
+
+          <TextInput
+            style={styles.input}
+            placeholder="Senha"
+            placeholderTextColor={ColourPalet.dim}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!showPassword}
+          />
+          <TouchableOpacity 
+            onPress={() => setShowPassword(!showPassword)}
+            style={styles.eyeIcon}
+          >
+            <Ionicons name={showPassword ? "eye-off" : "eye"} size={24} color={ColourPalet.dim} />
+          </TouchableOpacity>
 
           <TouchableOpacity 
             style={styles.button}
@@ -104,7 +122,12 @@ const styles = StyleSheet.create({
     color: ColourPalet.text,
     fontSize: 18,
     fontWeight: 'bold'
-  }
+  },
+  eyeIcon: {
+    position: 'absolute',
+    right: 15,
+    top: 15,
+  },
 });
 
 export default Login;

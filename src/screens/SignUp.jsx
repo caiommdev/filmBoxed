@@ -14,14 +14,17 @@ import {
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ColourPalet from '../AppColours/ColourPalete';
 import UserService from '../services/UserService';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function SignUp() {
   const navigation = useNavigation();
   const { handleLogin } = useRoute().params;
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
-    username: '@'
+    username: '@',
+    password: ''
   });
 
   const handleSubmit = async () => {
@@ -36,6 +39,10 @@ export default function SignUp() {
       }
       if (!UserService.validateUsername(formData.username)) {
         Alert.alert('Erro', 'Username deve começar com @ e ter mais de 1 caractere');
+        return;
+      }
+      if (!UserService.validatePassword(formData.password)) {
+        Alert.alert('Erro', 'Senha deve ter pelo menos 6 caracteres');
         return;
       }
 
@@ -87,6 +94,21 @@ export default function SignUp() {
                 onChangeText={(text) => setFormData({...formData, username: text})}
                 autoCapitalize="none"
             />
+
+            <TextInput
+                style={styles.input}
+                placeholder="Senha"
+                placeholderTextColor={ColourPalet.dim}
+                value={formData.password}
+                onChangeText={(text) => setFormData({...formData, password: text})}
+                secureTextEntry={!showPassword}
+            />
+            <TouchableOpacity 
+                onPress={() => setShowPassword(!showPassword)}
+                style={styles.eyeIcon}
+            >
+                <Ionicons name={showPassword ? "eye-off" : "eye"} size={24} color={ColourPalet.dim} />
+            </TouchableOpacity>
 
             <TouchableOpacity 
                 style={styles.button}
@@ -152,5 +174,10 @@ const styles = StyleSheet.create({
   },
   placeholder: {
     color: ColourPalet.dim,
-  }
+  },
+  eyeIcon: {
+    position: 'absolute',
+    right: 15,
+    top: 15,
+  },
 });
