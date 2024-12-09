@@ -14,7 +14,7 @@ import {
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ColourPalet from '../AppColours/ColourPalete';
 import UserService from '../services/UserService';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 export default function SignUp() {
   const navigation = useNavigation();
@@ -46,8 +46,9 @@ export default function SignUp() {
         return;
       }
 
-      await UserService.saveUser(formData);
-      handleLogin(formData.username);
+      const user = { ...formData, image: null };
+      await UserService.saveUser(user);
+      handleLogin(user);
       Alert.alert('Sucesso', 'Conta criada com sucesso!', [
         { 
           text: 'OK', 
@@ -64,6 +65,13 @@ export default function SignUp() {
       <KeyboardAvoidingView 
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}>
+
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => navigation.navigate('Home')}
+        >
+          <MaterialIcons name="arrow-back" size={28} color={ColourPalet.highlight} />
+        </TouchableOpacity>
 
         <View style={styles.formContainer}>
             <Text style={styles.title}>Criar Conta</Text>
@@ -179,5 +187,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 15,
     top: 15,
+  },
+  backButton: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
   },
 });

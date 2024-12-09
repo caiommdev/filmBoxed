@@ -15,6 +15,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import ColourPalet from "../../AppColours/ColourPalete";
 import UserService from "../../services/UserService";
 import { Ionicons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 function Login() {
   const navigation = useNavigation();
@@ -32,7 +33,7 @@ function Login() {
         return;
       }
 
-      handleLogin(user.username);
+      handleLogin(user);
       navigation.navigate("FilmList");
       
     } catch (error) {
@@ -46,6 +47,12 @@ function Login() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
       >
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => navigation.navigate('Home')}
+        >
+          <MaterialIcons name="arrow-back" size={28} color={ColourPalet.highlight} />
+        </TouchableOpacity>
         <View style={styles.formContainer}>
           <Text style={styles.title}>Login</Text>
           
@@ -127,6 +134,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 15,
     top: 15,
+  },
+  backButton: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
   },
 });
 

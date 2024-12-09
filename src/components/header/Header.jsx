@@ -45,6 +45,12 @@ function Header({ isLoggedIn, username, onLogoutClick }) {
               >
                 <MaterialIcons name="logout" size={28} color="#fff" />
               </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.iconButton}
+                onPress={() => navigation.navigate('Profile')}
+              >
+                <MaterialIcons name="person" size={28} color="#fff" />
+              </TouchableOpacity>
             </View>
           ) : null}
         </View>

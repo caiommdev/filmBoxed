@@ -11,22 +11,23 @@ import FilmDetails from './screens/FilmDetails';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Home from './screens/Home';
 import SignUp from './screens/SignUp';
+import Profile from './screens/Profile';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
-  const [username, setUsername] = useState('');
+  const [user, setUser] = useState(null);
 
-  const handleLogin = (username) => {
-    setUsername(username);
+  const handleLogin = (user) => {
+    setUser(user);
     setIsLoggedIn(true);
     setShowLogin(false);
   };
 
   const handleLogout = () => {
-    setUsername('');
+    setUser();
     setIsLoggedIn(false);
     setShowLogin(false);
   };
@@ -38,7 +39,7 @@ export default function App() {
         <View style={X.container}>
           <Header
             isLoggedIn={isLoggedIn}
-            username={username}
+            user={user}
             onLogoutClick={handleLogout}
           />
           <View style={{ flex: 1, width: '100%' }}>
@@ -51,6 +52,14 @@ export default function App() {
               <Stack.Screen name="Login" component={Login} initialParams={{ handleLogin }}/>
               <Stack.Screen name="FilmList" component={FilmList} />
               <Stack.Screen name="FilmDetails" component={FilmDetails} />
+              <Stack.Screen 
+                name="Profile" 
+                component={Profile} 
+                initialParams={{ 
+                    username: user ? user.username : '', 
+                    email: user ? user.email : '' 
+                }}
+              />
             </Stack.Navigator>
           </View>
         </View>

@@ -60,6 +60,18 @@ class UserService {
     return users.find(user => user.email === email);
   }
 
+  async updateUser(email, updates) {
+    const users = await this.getUsers();
+    const user = users.find(user => user.email === email);
+    if (user) {
+      Object.assign(user, updates);
+      await FileSystem.writeAsStringAsync(
+        this.filePath,
+        JSON.stringify({ users }, null, 2)
+      );
+    }
+  }
+
   validateEmail(email) {
     const regex = /^[^\s@]+@[^\s@]+\.com(\.[a-zA-Z]{2})?$/;
     return regex.test(email);
