@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useContext } from "react";
 import { 
   View, 
   Text, 
@@ -16,13 +16,16 @@ import ColourPalet from "../../AppColours/ColourPalete";
 import UserService from "../../services/UserService";
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import { AuthContext } from "../../contexts/AuthContext";
 
 function Login() {
   const navigation = useNavigation();
-  const { handleLogin } = useRoute().params;
+  //const { handleLogin } = useRoute().params;
   const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
+
+  const { handleLogin } = useContext(AuthContext);
 
   const handleSubmit = async () => {
     try {
@@ -33,7 +36,7 @@ function Login() {
         return;
       }
 
-      handleLogin(user);
+      await handleLogin(user);// aguardo o login para redirecionar o usuário
       navigation.navigate("FilmList");
       
     } catch (error) {

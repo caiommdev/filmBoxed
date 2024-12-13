@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import { useState, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import SearchBar from '../searchBar/SearchBar';
+import { AuthContext } from '../../contexts/AuthContext';
 
-function Header({ isLoggedIn, username, onLogoutClick }) {
+function Header() {
+
+  const { isLoggedIn, user, handleLogout } = useContext(AuthContext);
   const [showSearch, setShowSearch] = useState(false);
   const navigation = useNavigation();
 
   const handleLogoutClick = () => {
-    onLogoutClick();
+    handleLogout();
     navigation.navigate('Home');
   };
 
@@ -17,42 +20,47 @@ function Header({ isLoggedIn, username, onLogoutClick }) {
 	setShowSearch(!showSearch)
   };
 
+  const handleNavigation = (screen) => {
+    if(isLoggedIn) 
+      navigation.navigate(screen);
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.header}>
         <TouchableOpacity 
           style={styles.iconButton}
-          onPress={() => navigation.navigate('FilmList')}
+          onPress={() => handleNavigation('FilmList')}
         >
           <MaterialIcons name="movie" size={28} color="#fff" />
         </TouchableOpacity>
 
         <View style={styles.rightIcons}>
-          <TouchableOpacity 
-            style={styles.iconButton}
-            onPress={() => handleSearchClick()}
-          >
-            <MaterialIcons name="search" size={28} color="#fff" />
-          
-		  </TouchableOpacity>
 
-          {isLoggedIn ? (
-            <View style={styles.userSection}>
-              <Text style={styles.username}>{username}</Text>
-              <TouchableOpacity 
-                style={styles.iconButton} 
-                onPress={() => handleLogoutClick()}
-              >
-                <MaterialIcons name="logout" size={28} color="#fff" />
-              </TouchableOpacity>
-              <TouchableOpacity 
-                style={styles.iconButton}
-                onPress={() => navigation.navigate('Profile')}
-              >
-                <MaterialIcons name="person" size={28} color="#fff" />
-              </TouchableOpacity>
-            </View>
-          ) : null}
+        {isLoggedIn ? (
+          <View style={styles.userSection}>
+            <TouchableOpacity 
+              style={styles.iconButton}
+              onPress={() => handleSearchClick()}
+            >
+              <MaterialIcons name="search" size={28} color="#fff" />
+            
+            </TouchableOpacity>
+            <Text style={styles.username}>{user?.username}</Text>
+            <TouchableOpacity 
+              style={styles.iconButton} 
+              onPress={() => handleLogoutClick()}
+            >
+              <MaterialIcons name="logout" size={28} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={styles.iconButton}
+              onPress={() => navigation.navigate('Profile')}
+            >
+              <MaterialIcons name="person" size={28} color="#fff" />
+            </TouchableOpacity>
+          </View>
+        ) : null}
         </View>
       </View>
       {showSearch && <SearchBar />}

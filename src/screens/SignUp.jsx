@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useContext } from 'react';
 import { 
   View, 
   Text, 
@@ -15,11 +15,13 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import ColourPalet from '../AppColours/ColourPalete';
 import UserService from '../services/UserService';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { AuthContext } from '../contexts/AuthContext';
 
 export default function SignUp() {
   const navigation = useNavigation();
-  const { handleLogin } = useRoute().params;
+  //const { handleLogin } = useRoute().params;
   const [showPassword, setShowPassword] = useState(false);
+  const { handleLogin } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -48,7 +50,7 @@ export default function SignUp() {
 
       const user = { ...formData, image: null };
       await UserService.saveUser(user);
-      handleLogin(user);
+      await handleLogin(user); //aguardo o login para redirecionar o usuário
       Alert.alert('Sucesso', 'Conta criada com sucesso!', [
         { 
           text: 'OK', 

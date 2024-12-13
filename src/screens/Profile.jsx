@@ -5,9 +5,7 @@ import { useRoute } from '@react-navigation/native';
 import ColourPalet from "../AppColours/ColourPalete";
 import UserService from '../services/UserService';
 
-export default function Profile() {
-    const route = useRoute();
-    const { username, email } = route.params;
+export default function Profile({ username, email }) {
     const [image, setImage] = useState(null);
 
     useEffect(() => {

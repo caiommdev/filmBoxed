@@ -6,66 +6,83 @@ import styles from './styles';
 import ColourPalet from './AppColours/ColourPalete';
 import Login from './screens/login/Login';
 import Header from './components/header/Header';
+import PrivateRoute from './components/privateRoute/PrivateRoute';
 import FilmList from './screens/FilmList';
 import FilmDetails from './screens/FilmDetails';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Home from './screens/Home';
 import SignUp from './screens/SignUp';
 import Profile from './screens/Profile';
+import { AuthContext } from './contexts/AuthContext';
 
 const Stack = createStackNavigator();
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
-  const [user, setUser] = useState(null);
-
-  const handleLogin = (user) => {
-    setUser(user);
-    setIsLoggedIn(true);
-    setShowLogin(false);
-  };
-
-  const handleLogout = () => {
-    setUser();
-    setIsLoggedIn(false);
-    setShowLogin(false);
-  };
-
-  return (
-    <NavigationContainer>
-      <GestureHandlerRootView style={{flex:1}}>
-      <View style={styles.body}>
-        <View style={X.container}>
-          <Header
-            isLoggedIn={isLoggedIn}
-            user={user}
-            onLogoutClick={handleLogout}
-          />
-          <View style={{ flex: 1, width: '100%' }}>
-          <Stack.Navigator 
-              screenOptions={{ headerShown: false }}
-              initialRouteName="Home"
-            >
-              <Stack.Screen name="Home" component={Home} />
-              <Stack.Screen name="SignUp" component={SignUp} initialParams={{ handleLogin }}/>
-              <Stack.Screen name="Login" component={Login} initialParams={{ handleLogin }}/>
-              <Stack.Screen name="FilmList" component={FilmList} />
-              <Stack.Screen name="FilmDetails" component={FilmDetails} />
-              <Stack.Screen 
-                name="Profile" 
-                component={Profile} 
-                initialParams={{ 
-                    username: user ? user.username : '', 
-                    email: user ? user.email : '' 
-                }}
-              />
-            </Stack.Navigator>
-          </View>
-        </View>
-      </View>
-      </GestureHandlerRootView>
-    </NavigationContainer>
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [user, setUser] = useState(null);
+  
+    const handleLogin = async (user) => {
+      setUser(user);
+      setIsLoggedIn(true);
+      return true;
+    };
+  
+    const handleLogout = () => {
+      setUser(null);
+      setIsLoggedIn(false);
+    };
+  
+    return (
+        <AuthContext.Provider value={{ isLoggedIn, user, handleLogin, handleLogout }}>
+            <NavigationContainer>
+                <GestureHandlerRootView style={{flex:1}}>
+                    <View style={styles.body}>
+                        <View style={X.container}>
+                            <Header/>
+                            <View style={{ flex: 1, width: '100%' }}>
+                                <Stack.Navigator 
+                                screenOptions={{ headerShown: false }}
+                                initialRouteName="Home"
+                                >
+                                    <Stack.Screen name="Home" component={Home} />
+                                    <Stack.Screen name="SignUp" component={SignUp}/>
+                                    <Stack.Screen name="Login" component={Login}/>
+                                    <Stack.Screen 
+                                        name="FilmList" 
+                                        children={({route}) => (
+                                            <PrivateRoute isLoggedIn={isLoggedIn}>
+                                                <FilmList route={route} />
+                                            </PrivateRoute>
+                                        )} 
+                                    />
+                                    <Stack.Screen 
+                                        name="FilmDetails" 
+                                        children={({route, navigation}) => (
+                                            <PrivateRoute isLoggedIn={isLoggedIn}>
+                                                <FilmDetails route={route} navigation={navigation} />
+                                            </PrivateRoute>
+                                        )} 
+                                    />
+                                    <Stack.Screen 
+                                        name="Profile" 
+                                        children={({route, navigation}) => (
+                                            <PrivateRoute isLoggedIn={isLoggedIn}>
+                                                <Profile 
+                                                    route={route} 
+                                                    navigation={navigation}
+                                                    username={user?.username} 
+                                                    email={user?.email} 
+                                                />
+                                            </PrivateRoute>
+                                        )} 
+                                    />
+                                </Stack.Navigator>
+                            </View>
+                        </View>
+                    </View>
+                </GestureHandlerRootView>
+            </NavigationContainer>
+    </AuthContext.Provider>
   );
 }
 
